@@ -29,7 +29,8 @@
             "/power_consumption",
             function(json){ 
                 // console.log(json)
-                selectGauge.set(json.WHE);
+                selectGauge.set(json.data.WHE);
+                $("#device-id").text(json.deviceId);
             });
         });
     }
