@@ -29,12 +29,13 @@ app.get('/power_consumption', function (req, res) {
   influx.query(`
     SHOW TAG VALUES WITH KEY ="device_id"
   `).then(rows => {
+    const deviceId = rows[rows.length-1]['value'];
     influx.query(`
-      select * from P where device_id = '`+ rows[rows.length-1]['value'] + `'
+      select * from P where device_id = '`+ deviceId + `'
       order by time desc
       limit 1
     `).then(rows => {
-        rows.forEach(row => res.json(row))
+        rows.forEach(row => res.json({"deviceId": deviceId, "data":row}))
     })
   })
 })
