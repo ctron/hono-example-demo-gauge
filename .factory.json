@@ -73,7 +73,7 @@
     "name": "hono-example-demo-gauge",
     "commands": [
       {
-        "commandLine": "cd hono-example-demo-gauge\nnpm start",
+        "commandLine": "cd hono-example-demo-gauge\nnpm run build-ts\nnpm start",
         "name": "buildAndRun",
         "attributes": {
           "goal": "Run",
