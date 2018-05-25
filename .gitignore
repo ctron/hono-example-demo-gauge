@@ -2,3 +2,8 @@
 # Eclipse
 
 .project
+
+# NodeJS
+
+dist/
+node_modules/
