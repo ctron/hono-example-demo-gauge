@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as Influx from 'influx';
+import * as Kafka from 'kafka-node';
 
 const app = express();
 
@@ -15,6 +16,16 @@ app.use('/jquery', express.static(__dirname + '/../node_modules/jquery/dist/'));
 
 app.engine('html', require('ejs').renderFile);
 
+const consumerGroup = new Kafka.ConsumerGroupStream({kafkaHost: "hono-kafka-cluster-kafka.strimzi.svc:9092"}, 'telemetry');
+
+
+var lastState = {deviceId:"N/A", data: {}};
+
+consumerGroup.on('data', (chunk) => {
+    console.log(chunk);
+    lastState.data = JSON.parse(chunk.value);
+});
+
 const influx = new Influx.InfluxDB('http://' + influxdbhost + ':' + influxdbport + '/payload')
 
 influx.getDatabaseNames()
@@ -24,7 +35,12 @@ app.get('/', function (req, res) {
   res.render('index.html');
 });
 
-app.get('/power_consumption', function (req, res) {
+app.get('/power_consumption', function(req, res) {
+    // console.log(lastState);
+    res.json(lastState);
+});
+
+app.get('/power_consumptionX', function (req, res) {
 
   influx.query(`
     SHOW TAG VALUES WITH KEY ="device_id"
