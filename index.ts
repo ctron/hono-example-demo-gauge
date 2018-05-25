@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as Kafka from 'kafka-node';
+import * as OS from 'os';
 
 const app = express();
 
@@ -12,7 +13,13 @@ app.use('/jquery', express.static(__dirname + '/../node_modules/jquery/dist/'));
 
 app.engine('html', require('ejs').renderFile);
 
-const consumerGroup = new Kafka.ConsumerGroupStream({kafkaHost: "hono-kafka-cluster-kafka.strimzi.svc:9092"}, 'telemetry');
+const hostname = OS.hostname();
+console.log("Hostname:", hostname);
+
+const consumerGroup = new Kafka.ConsumerGroupStream({
+    kafkaHost: "hono-kafka-cluster-kafka.strimzi.svc:9092",
+    groupId: hostname
+}, 'telemetry');
 
 var lastState = {deviceId:"N/A", data: {}};
 
