@@ -19,27 +19,22 @@
 <body>
 
   <div id="preview" style="width: 100%; height: 95vh;">
-    <canvas id="gauge" style="width: 100%; height: 80%;"></canvas>
-    <div id="preview-textfield" style="font-size: 3em; font-weight: bold;"></div>
+    <div id="gauge" style="width: 100%; height: 75%;"></div>
     <div id="device-id" style="font-size: 2em;"></div>
   </div>
 
-<script src="/gauge/gauge.min.js"></script>
+<script src="/justgage/raphael-2.1.4.min.js"></script>
+<script src="/justgage/justgage.js"></script>
 <script src="/jquery/jquery.min.js"></script>
 
 <script>
 
-    var opts = {
-        colorStart: "#6666AA",
-        colorStop: "#6666AA",
-        highDpiSupport: true
-    };
-
-    var selectGauge = new Gauge(document.getElementById("gauge")).setOptions(opts);
-    selectGauge.setTextField(document.getElementById("preview-textfield"));
-    selectGauge.animationSpeed = 20;
-    selectGauge.maxValue = 5000;
-    selectGauge.set(0);
+    var gauge = new JustGage({
+        id: "gauge",
+        value: 0,
+        min: 0,
+        max: 5000
+    });
 
     function refreshGauge()
     {
@@ -48,7 +43,7 @@
             "/power_consumption",
             function(json){ 
                 // console.log(json)
-                selectGauge.set(json.data.WHE);
+                gauge.refresh(json.data.WHE);
                 $("#device-id").text(json.deviceId);
             });
         });

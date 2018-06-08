@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
-app.use('/gauge', express.static(__dirname + '/../node_modules/gaugeJS/dist/'));
+app.use('/justgage', express.static(__dirname + '/../node_modules/justgage/'));
 app.use('/jquery', express.static(__dirname + '/../node_modules/jquery/dist/'));
 
 app.engine('html', require('ejs').renderFile);
