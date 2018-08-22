@@ -8,6 +8,13 @@ const app = express();
 const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
+const kafka_project = process.env.KAFKA_PROJECT || "strimzi"
+const kafka_cluster_name = process.env.KAFKA_CLUSTER_NAME || "hono-kafka-cluster"
+
+const kafka_port = "9092"
+const kafka_service = kafka_cluster_name + "-kafka-bootstrap"
+const kafka_host = kafka_service + "." + kafka_project + ".svc:" + kafka_port
+
 app.use('/justgage', express.static(__dirname + '/../node_modules/justgage/'));
 app.use('/jquery', express.static(__dirname + '/../node_modules/jquery/dist/'));
 
@@ -17,7 +24,7 @@ const hostname = OS.hostname();
 console.log("Hostname:", hostname);
 
 const consumerGroup = new Kafka.ConsumerGroupStream({
-    kafkaHost: "hono-kafka-cluster-kafka.strimzi.svc:9092",
+    kafkaHost: kafka_host,
     groupId: hostname
 }, 'telemetry');
 
