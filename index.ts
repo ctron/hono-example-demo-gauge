@@ -45,8 +45,16 @@ switch(payload_format) {
 }
 
 consumerGroup.on('data', (chunk) => {
-    console.log(chunk);
-    lastState = {deviceId:chunk.key, value: payloadConverter(JSON.parse(chunk.value))};
+    // console.log(chunk);
+    if ( ! chunk.value ) {
+        return;
+    }
+    try {
+        lastState = {deviceId:chunk.key, value: payloadConverter(JSON.parse(chunk.value))};
+    }
+    catch(e) {
+        console.log(e);
+    }
 });
 
 app.get('/', function (req, res) {
