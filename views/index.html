@@ -8,7 +8,7 @@
 <style>
 
 #preview > div {
-    text-align: center;    
+    text-align: center;
     color: green;
     font-family: sans-serif;
 }
@@ -43,7 +43,7 @@
             "/power_consumption",
             function(json){ 
                 // console.log(json)
-                gauge.refresh(json.data.WHE);
+                gauge.refresh(json.value);
                 $("#device-id").text(json.deviceId);
             });
         });

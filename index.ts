@@ -8,6 +8,8 @@ const app = express();
 const port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
   ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
+const payload_format = process.env.PAYLOAD_FORMAT || 'flow';
+
 const kafka_project = process.env.KAFKA_PROJECT || "strimzi"
 const kafka_cluster_name = process.env.KAFKA_CLUSTER_NAME || "hono-kafka-cluster"
 
@@ -28,11 +30,23 @@ const consumerGroup = new Kafka.ConsumerGroupStream({
     groupId: hostname
 }, 'telemetry');
 
-var lastState = {deviceId:"N/A", data: {}};
+var lastState = {deviceId:"N/A", value: ""};
+
+var payloadConverter;
+switch(payload_format) {
+    case 'kura': {
+        payloadConverter = (json) => json.metrics.value;
+        break;
+    }
+    default: {
+        payloadConverter = (json) => json.WHE;
+        break;
+    }
+}
 
 consumerGroup.on('data', (chunk) => {
     console.log(chunk);
-    lastState = {deviceId:chunk.key, data: JSON.parse(chunk.value)};
+    lastState = {deviceId:chunk.key, value: payloadConverter(JSON.parse(chunk.value))};
 });
 
 app.get('/', function (req, res) {
