@@ -18,15 +18,15 @@
   "license": "EPL-2.0",
   "dependencies": {
     "ejs": "^2.5.7",
-    "express": "^4.16.2",
-    "justgage": "^1.2.2",
+    "express": "^4.16.4",
     "jquery": "^3.2.1",
-    "path": "^0.12.7",
-    "kafka-node": "^2.6.1"
+    "justgage": "^1.2.2",
+    "kafka-node": "^4.0.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {
-    "@types/node": "^8.10.19",
+    "@types/node": "^8.10.40",
     "ts-node": "^5.0.0",
-    "typescript": "^2.9.1"
+    "typescript": "^2.9.2"
   }
 }
